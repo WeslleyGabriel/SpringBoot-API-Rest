@@ -49,6 +49,39 @@ public class UsuarioController {
 
         return new ResponseEntity<Usuario>(user, HttpStatus.CREATED);
     }
+
+    @DeleteMapping(value = "delete")
+    @ResponseBody
+    public ResponseEntity<String> delete(@RequestParam Long iduser){
+
+        usuarioRepository.deleteById(iduser);
+
+        return new ResponseEntity<String>("Usuario foi deletado do sistema!", HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "buscaruserid")
+    @ResponseBody
+    public ResponseEntity<Usuario> buscaruserid (@RequestParam(name = "iduser") Long iduser){
+
+        Usuario usuario = usuarioRepository.findById(iduser).get();
+
+        return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+    }
+
+
+    @PutMapping(value = "atualizar")
+    @ResponseBody
+    public ResponseEntity<?> atualizar(@RequestBody Usuario usuario){
+
+        if(usuario.getId() == null){
+            return new ResponseEntity<String>("Id não encontrado! Por favor, informe o ID do usuário.", HttpStatus.OK);
+        }
+
+        Usuario user = usuarioRepository.saveAndFlush(usuario);
+
+        return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+    }
 }
 
 
