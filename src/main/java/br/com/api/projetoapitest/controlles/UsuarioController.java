@@ -17,24 +17,9 @@ public class UsuarioController {
     private  UsuarioRepository usuarioRepository;
 
 
-    @GetMapping("/br/{name}/{idade}")
+    @GetMapping(value = "/listaTodos")
     @ResponseBody
-    public String home(@PathVariable (name = "name") String name,
-                       @PathVariable (value = "idade") int idade) {
-
-        Usuario usuario = new Usuario();
-        usuario.setNome(name);
-        usuario.setIdade(idade);
-        usuarioRepository.save(usuario);
-
-
-        return "Olá Weslley!!! " + name + idade;
-    }
-
-
-    @GetMapping(value = "listaTodos")
-    @ResponseBody
-    public ResponseEntity<List<Usuario>> listaUsuarios(){
+    public ResponseEntity<List<Usuario>> getAllUsuarios(){
 
         List<Usuario> usuarios = usuarioRepository.findAll();
 
@@ -52,9 +37,9 @@ public class UsuarioController {
 
     @DeleteMapping(value = "delete")
     @ResponseBody
-    public ResponseEntity<String> delete(@RequestParam Long iduser){
+    public ResponseEntity<String> delete(@RequestParam Long idUser){
 
-        usuarioRepository.deleteById(iduser);
+     usuarioRepository.deleteById(idUser);
 
         return new ResponseEntity<String>("Usuario foi deletado do sistema!", HttpStatus.OK);
     }
@@ -62,25 +47,34 @@ public class UsuarioController {
 
     @GetMapping(value = "buscaruserid")
     @ResponseBody
-    public ResponseEntity<Usuario> buscaruserid (@RequestParam(name = "iduser") Long iduser){
+    public ResponseEntity<Usuario> buscaruserid (@RequestParam(name = "idUser") Long idUser){
 
-        Usuario usuario = usuarioRepository.findById(iduser).get();
+        Usuario usuarios = usuarioRepository.findById(idUser).get();
 
-        return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+        return new ResponseEntity<Usuario>(usuarios, HttpStatus.OK);
     }
 
 
     @PutMapping(value = "atualizar")
     @ResponseBody
-    public ResponseEntity<?> atualizar(@RequestBody Usuario usuario){
+    public ResponseEntity<?> atualizar(@RequestBody Usuario usuario) throws ClassNotFoundException{
 
         if(usuario.getId() == null){
             return new ResponseEntity<String>("Id não encontrado! Por favor, informe o ID do usuário.", HttpStatus.OK);
         }
 
-        Usuario user = usuarioRepository.saveAndFlush(usuario);
+        Usuario usuarios = usuarioRepository.saveAndFlush(usuario);
 
-        return new ResponseEntity<Usuario>(user, HttpStatus.OK);
+        return new ResponseEntity<Usuario>(usuarios, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "buscarPorNome")
+    @ResponseBody
+    public ResponseEntity<List<Usuario>> buscarPorNome (@RequestParam(name = "name") String nome){
+
+        List<Usuario> usuario = usuarioRepository.findByName(nome.trim().toUpperCase());
+
+        return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.OK);
     }
 }
 

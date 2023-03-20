@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    @Query(value = "SELECT u FROM Usuario u WHERE u.nome LIKE %?1%")
-    List<Usuario> buscarPorNome(String name);
+    @Query(value = "SELECT u FROM Usuario u WHERE upper(trim(u.nome)) LIKE %?1%")
+    List<Usuario> findByName(String nome);
 
 }
