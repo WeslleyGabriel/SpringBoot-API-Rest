@@ -1,7 +1,7 @@
 package br.com.api.projetoapitest.controlles;
 
-import br.com.api.projetoapitest.model.Usuario;
-import br.com.api.projetoapitest.repository.UsuarioRepository;
+import br.com.api.projetoapitest.modelTest.Usuario;
+import br.com.api.projetoapitest.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +14,18 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private  UsuarioRepository usuarioRepository;
+    private  UsuarioService usuarioService;
+
+    public UsuarioController(br.com.api.projetoapitest.service.UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
 
     @GetMapping(value = "/listaTodos")
     @ResponseBody
     public ResponseEntity<List<Usuario>> getAllUsuarios(){
 
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<Usuario> usuarios = usuarioService.getAllUsuarios();
 
         return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
     }
@@ -30,7 +34,7 @@ public class UsuarioController {
     @ResponseBody
     public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){
 
-        Usuario user = usuarioRepository.save(usuario);
+        Usuario user = usuarioService.salvar(usuario);
 
         return new ResponseEntity<Usuario>(user, HttpStatus.CREATED);
     }
@@ -39,7 +43,7 @@ public class UsuarioController {
     @ResponseBody
     public ResponseEntity<String> delete(@RequestParam Long idUser){
 
-     usuarioRepository.deleteById(idUser);
+     usuarioService.delete(idUser);
 
         return new ResponseEntity<String>("Usuario foi deletado do sistema!", HttpStatus.OK);
     }
@@ -49,7 +53,7 @@ public class UsuarioController {
     @ResponseBody
     public ResponseEntity<Usuario> buscaruserid (@RequestParam(name = "idUser") Long idUser){
 
-        Usuario usuarios = usuarioRepository.findById(idUser).get();
+        Usuario usuarios = usuarioService.buscaruserid(idUser);
 
         return new ResponseEntity<Usuario>(usuarios, HttpStatus.OK);
     }
@@ -63,16 +67,16 @@ public class UsuarioController {
             return new ResponseEntity<String>("Id não encontrado! Por favor, informe o ID do usuário.", HttpStatus.OK);
         }
 
-        Usuario usuarios = usuarioRepository.saveAndFlush(usuario);
+        usuarioService.atualizar(usuario);
 
-        return new ResponseEntity<Usuario>(usuarios, HttpStatus.OK);
+        return new ResponseEntity<Usuario>( HttpStatus.OK);
     }
 
     @GetMapping(value = "buscarPorNome")
     @ResponseBody
     public ResponseEntity<List<Usuario>> buscarPorNome (@RequestParam(name = "name") String nome){
 
-        List<Usuario> usuario = usuarioRepository.findByName(nome.trim().toUpperCase());
+        List<Usuario> usuario = usuarioService.buscarpornome(nome.trim().toUpperCase());
 
         return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.OK);
     }

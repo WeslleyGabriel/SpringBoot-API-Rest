@@ -1,4 +1,4 @@
-package br.com.api.projetoapitest.model;
+package br.com.api.projetoapitest.modelTest;
 
 
 import jakarta.persistence.*;
@@ -21,6 +21,16 @@ public class Usuario implements Serializable {
     private String nome;
 
     private int idade;
+
+    public Usuario( ) {
+    }
+
+    public Usuario(Long id, String nome, int idade ) {
+        this.id = id;
+        this.nome = nome;
+        this.idade = idade;
+    }
+
 
     public int getIdade() {
         return idade;

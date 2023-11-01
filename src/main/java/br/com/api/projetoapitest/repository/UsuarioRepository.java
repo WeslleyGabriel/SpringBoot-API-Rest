@@ -1,7 +1,7 @@
 package br.com.api.projetoapitest.repository;
 
 
-import br.com.api.projetoapitest.model.Usuario;
+import br.com.api.projetoapitest.modelTest.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
